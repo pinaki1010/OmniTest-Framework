@@ -123,7 +123,7 @@ public final class ConfigManager {
     }
 
     public String getPactConsumerName() {
-        return textOrDefault(root.path("defaults").path("pact"), "consumerName", "unified-test-platform");
+        return textOrDefault(root.path("defaults").path("pact"), "consumerName", "omnitest-framework");
     }
 
     public String getPactProviderName() {

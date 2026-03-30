@@ -57,5 +57,5 @@ environments:
 
 defaults:
   pact:
-    consumerName: "unified-test-platform"
+    consumerName: "omnitest-framework"
     providerName: "user-service"

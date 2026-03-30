@@ -21,7 +21,6 @@ jobs:
           cache: maven
 
       - name: Install Playwright browsers (Java)
-        working-directory: unified-test-platform
         run: mvn -B exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install --with-deps"
 
       - name: Start Docker services
@@ -35,14 +34,12 @@ jobs:
           done
 
       - name: Run tests
-        working-directory: unified-test-platform
         env:
           ENV: dev
         run: mvn -B clean test
 
       - name: Generate Allure report
         if: always()
-        working-directory: unified-test-platform
         run: mvn -B allure:report
 
       - name: Upload Allure report
@@ -50,11 +47,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
-          path: unified-test-platform/target/site
+          path: target/site
 
       - name: Upload pact files
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pact-files
-          path: unified-test-platform/target/pacts
+          path: target/pacts

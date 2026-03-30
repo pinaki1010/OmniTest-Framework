@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.omnitest.platform</groupId>
-    <artifactId>unified-test-platform</artifactId>
+    <artifactId>omnitest-framework</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Unified Test Automation Platform</name>
+    <name>OmniTest Framework</name>
     <description>UI, API, Database, and Contract testing with TestNG, Playwright, REST Assured, JDBC, and Pact</description>
 
     <properties>
