@@ -26,9 +26,10 @@ public final class ConfigManager {
 
     private ConfigManager() {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.yaml")) {
+        try (InputStream in = openConfigYaml()) {
             if (in == null) {
-                throw new IllegalStateException("config.yaml not found on classpath (src/test/resources)");
+                throw new IllegalStateException(
+                        "config.yaml not found on classpath; add it under src/test/resources or src/main/resources");
             }
             this.root = mapper.readTree(in);
         } catch (IOException e) {
@@ -44,6 +45,17 @@ public final class ConfigManager {
 
     public static ConfigManager getInstance() {
         return INSTANCE;
+    }
+
+    private static InputStream openConfigYaml() {
+        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+        if (tccl != null) {
+            InputStream in = tccl.getResourceAsStream("config.yaml");
+            if (in != null) {
+                return in;
+            }
+        }
+        return ConfigManager.class.getClassLoader().getResourceAsStream("config.yaml");
     }
 
     public String getEnvironment() {

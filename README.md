@@ -15,6 +15,7 @@
 | [`src/test/resources`](src/test/resources) | `config.yaml`, TestNG suite, schemas, test data, Log4j2 |
 | [`docker/`](docker/) | Compose file, Postgres init, WireMock mappings, nginx demo UI |
 | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) | CI: JDK 17, Playwright install, Docker, tests, Allure + pact artifacts |
+| [`docs/images/`](docs/images/) | README reference screenshots (Allure report examples) |
 | [`LICENSE`](LICENSE) | MIT License |
 
 ## Architecture
@@ -119,7 +120,13 @@ mvn clean test
 mvn allure:report
 ```
 
-Open `target/site/index.html` in a browser (exact folder name may vary slightly by allure-maven version).
+Open the report in a browser (Allure Maven writes under `allure-maven-plugin`):
+
+```bash
+open target/site/allure-maven-plugin/index.html
+```
+
+On Linux, use `xdg-open`; on Windows, open the same path in Explorer. The exact subfolder under `target/site/` can vary slightly by plugin version; if needed, look for `index.html` under `target/site/`.
 
 ## CI/CD integration
 
@@ -129,13 +136,27 @@ The workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on push
 - Playwright browser install (`com.microsoft.playwright.CLI`)
 - Docker Compose (Postgres, WireMock, demo UI)
 - `mvn clean test` at repo root
-- `mvn allure:report`, with artifacts for **Allure** (`target/site`) and **Pact contracts** (`target/pacts`)
+- `mvn allure:report`, with artifacts for **Allure** (`target/site/allure-maven-plugin/`) and **Pact contracts** (`target/pacts`)
 
 ## Sample report output
 
-After `mvn test` and `mvn allure:report`, Allure typically includes:
+After `mvn test` and `mvn allure:report`, open `target/site/allure-maven-plugin/index.html` in a browser (path is relative to the repo root; the `target/` folder is created by Maven). The screenshots below show what a successful report looks like.
 
-- **Suites / Behaviors**: grouped by `@Feature` / `@Story`
+### Overview dashboard
+
+The **Overview** page summarizes the latest run: total test cases, pass rate, suite name, and **Features by stories** (grouped by Allure `@Feature` / `@Story`, for example API, contract, E2E, database). Trend and categories may be empty on a first local run.
+
+![Allure Overview: pass rate, suite summary, and features by stories](docs/images/allure-report-overview.png)
+
+### Suites and test detail
+
+The **Suites** view lists tests by package and class. Selecting a method shows the **Test body**: steps such as Pact validation, REST **Request** / **HTTP** attachments, **test-context** and **db-verify** text, plus setup and teardown (for example `uiTearDown`, `baseTeardown`).
+
+![Allure Suites: hierarchy and expanded steps with API and DB attachments](docs/images/allure-report-suites-detail.png)
+
+In general, the report also includes:
+
+- **Behaviors**: another way to browse by feature/story
 - **Attachments**: REST request/response, DB row dumps, Pact summary text, UI screenshots on failure
 - **Timeline**: TestNG method ordering and duration
 

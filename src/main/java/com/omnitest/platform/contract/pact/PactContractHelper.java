@@ -15,6 +15,8 @@ import kotlin.Unit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Map;
+
 import static org.hamcrest.Matchers.equalTo;
 
 /**
@@ -37,6 +39,7 @@ public final class PactContractHelper {
                 .method("GET")
                 .willRespondWith()
                 .status(200)
+                .headers(Map.of("Content-Type", "application/json"))
                 .body("{\"id\":1,\"name\":\"Contract User\",\"email\":\"contract@example.com\",\"role\":\"user\"}")
                 .toPact();
 
