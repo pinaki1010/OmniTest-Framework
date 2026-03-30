@@ -1,0 +1,33 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: omnitest
+      POSTGRES_PASSWORD: omnitest
+      POSTGRES_DB: omnitest
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U omnitest -d omnitest"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+
+  wiremock:
+    image: wiremock/wiremock:3.10.0
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./wiremock:/home/wiremock
+
+  demo-ui:
+    image: nginx:1.27-alpine
+    ports:
+      - "8080:80"
+    depends_on:
+      - wiremock
+    volumes:
+      - ./demo-ui:/usr/share/nginx/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro

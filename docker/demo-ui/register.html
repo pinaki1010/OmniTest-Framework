@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Register</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 480px; margin: 2rem auto; }
+        label { display: block; margin-top: 0.75rem; }
+        input, button { width: 100%; padding: 0.5rem; margin-top: 0.25rem; }
+        #user-id { margin-top: 1rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+<h1>Register</h1>
+<form id="register-form">
+    <label for="name">Name</label>
+    <input id="name" type="text" required/>
+
+    <label for="email">Email</label>
+    <input id="email" type="email" required/>
+
+    <button id="submit" type="submit">Create user</button>
+</form>
+<p>User ID: <span id="user-id"></span></p>
+<script>
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const res = await fetch('/api/users', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({name, email, role: 'user'})
+        });
+        const data = await res.json();
+        document.getElementById('user-id').textContent = String(data.id);
+    });
+</script>
+</body>
+</html>

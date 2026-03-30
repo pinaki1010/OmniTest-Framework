@@ -1,0 +1,61 @@
+# Environment is selected via ENV (dev | qa | staging) or system property env
+
+environments:
+  dev:
+    baseUrl: "http://localhost:8080"
+    api:
+      baseUri: "http://localhost:8081"
+      basePath: "/api"
+    db:
+      jdbcUrl: "jdbc:postgresql://localhost:5432/omnitest"
+      username: "omnitest"
+      password: "omnitest"
+      poolSize: 5
+      driverClassName: "org.postgresql.Driver"
+    playwright:
+      headless: true
+      browser: "chromium"
+      viewportWidth: 1280
+      viewportHeight: 720
+      timeoutMs: 30000
+
+  qa:
+    baseUrl: "http://localhost:8080"
+    api:
+      baseUri: "http://localhost:8081"
+      basePath: "/api"
+    db:
+      jdbcUrl: "jdbc:postgresql://localhost:5432/omnitest"
+      username: "omnitest"
+      password: "omnitest"
+      poolSize: 5
+      driverClassName: "org.postgresql.Driver"
+    playwright:
+      headless: true
+      browser: "chromium"
+      viewportWidth: 1280
+      viewportHeight: 720
+      timeoutMs: 30000
+
+  staging:
+    baseUrl: "http://localhost:8080"
+    api:
+      baseUri: "http://localhost:8081"
+      basePath: "/api"
+    db:
+      jdbcUrl: "jdbc:postgresql://localhost:5432/omnitest"
+      username: "omnitest"
+      password: "omnitest"
+      poolSize: 5
+      driverClassName: "org.postgresql.Driver"
+    playwright:
+      headless: true
+      browser: "chromium"
+      viewportWidth: 1280
+      viewportHeight: 720
+      timeoutMs: 30000
+
+defaults:
+  pact:
+    consumerName: "unified-test-platform"
+    providerName: "user-service"

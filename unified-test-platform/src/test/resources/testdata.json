@@ -1,0 +1,7 @@
+{
+  "user": {
+    "name": "E2E Test User",
+    "email": "e2e.user@example.com",
+    "role": "user"
+  }
+}

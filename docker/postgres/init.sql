@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    role VARCHAR(64) DEFAULT 'user'
+);

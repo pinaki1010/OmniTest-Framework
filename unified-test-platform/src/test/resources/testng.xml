@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Unified Test Platform" parallel="false" verbose="1">
+    <listeners>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+        <listener class-name="com.omnitest.platform.reporting.TestFailureScreenshotListener"/>
+    </listeners>
+    <test name="Regression">
+        <groups>
+            <run>
+                <include name="regression"/>
+                <include name="smoke"/>
+                <include name="contract"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="com.omnitest.platform.tests"/>
+            <package name="com.omnitest.platform.contract.pact"/>
+        </packages>
+    </test>
+</suite>

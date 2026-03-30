@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Install Playwright browsers (Java)
+        working-directory: unified-test-platform
+        run: mvn -B exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install --with-deps"
+
+      - name: Start Docker services
+        run: docker compose -f docker/docker-compose.yml up -d
+
+      - name: Wait for Postgres
+        run: |
+          for i in $(seq 1 30); do
+            docker compose -f docker/docker-compose.yml exec -T postgres pg_isready -U omnitest -d omnitest && break
+            sleep 2
+          done
+
+      - name: Run tests
+        working-directory: unified-test-platform
+        env:
+          ENV: dev
+        run: mvn -B clean test
+
+      - name: Generate Allure report
+        if: always()
+        working-directory: unified-test-platform
+        run: mvn -B allure:report
+
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: unified-test-platform/target/site
+
+      - name: Upload pact files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pact-files
+          path: unified-test-platform/target/pacts
